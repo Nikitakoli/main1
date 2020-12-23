@@ -1,0 +1,36 @@
+float spd;
+ float frequency;
+#include <FreqMeasure.h>
+void setup() {
+    Serial.begin(57600);
+  FreqMeasure.begin();
+ pinMode(13,OUTPUT);
+  digitalWrite(13,0);
+}
+double sum=0;
+int count=0;
+void loop() {
+  if (FreqMeasure.available())
+  {
+    sum = sum + FreqMeasure.read();
+    count = count + 1;
+    if (count > 60) {
+       frequency = FreqMeasure.countToFrequency(sum / count);
+       spd = frequency / 19.49;
+      delay(50);
+       sum = 0;
+      count = 0;
+       if(spd >= 70)
+  {
+    digitalWrite(13,1);
+    Serial.print("a");
+  }
+   if(spd <= 70)
+  {
+    digitalWrite(13,0);
+     Serial.print("b");
+  }
+    }
+ }  
+      Serial.println(spd);
+     }
